@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+    xmlns:p="http://www.springframework.org/schema/p"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xmlns:util="http://www.springframework.org/schema/util"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+        
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<property name="username" value="ems" />
+       	<property name="password" value="ems" />
+    </bean>
+	
+	<bean id="dataSourceCV" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<property name="username" value="ems" />
+       	<property name="password" value="ems" />
+    </bean>
+	
+	<bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		 <property name="dataSource" ref="dataSource" />
+		 <property name = "annotatedClasses">
+		 	<list>
+		 		<value>main.ems.model.User</value>
+		 		<value>main.ems.model.Role</value>
+		 		<value>main.ems.model.Department</value>
+		 		<value>main.ems.model.Job</value>
+		 		<value>main.ems.model.HolidayRequest</value>
+		 		<value>main.ems.model.Notification</value>
+		 		<value>main.ems.model.Document</value>
+		 		<value>main.ems.model.Bonus</value>
+		 		<value>main.ems.model.BonusType</value>
+		 		<value>main.ems.model.Taxes</value>
+		 		<value>main.ems.model.Settings</value>
+		 		<value>main.ems.model.Salaries</value>
+		 		<value>main.ems.model.Vacancy</value>
+		 		<value>main.ems.model.Responsabilities</value>
+		 		<value>main.ems.model.SkillsRequired</value>
+		 		<value>main.ems.model.AdditionalRequirements</value>
+		 		
+		 		<value>main.ems.model.University</value>
+		 		<value>main.ems.model.Faculty</value>
+		 		<value>main.ems.model.CurriculumVitae</value>
+		 		<value>main.ems.model.Activitie</value>
+		 		<value>main.ems.model.Certificate</value>
+		 		<value>main.ems.model.EducationAndTraining</value>
+		 		<value>main.ems.model.Knowledge</value>
+		 		<value>main.ems.model.Language</value>
+		 		<value>main.ems.model.PersonalExperience</value>
+		 		<value>main.ems.model.PersonalProject</value>
+		 	</list>
+		 </property>
+		 <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.OracleDialect</prop>
+                
+                <prop key="hibernate.show_sql">true</prop>
+                <prop key="hibernate.c3p0.min_size">5</prop>
+                <prop key="hibernate.c3p0.max_size">20</prop>
+                <prop key="hibernate.c3p0.timeout">3000</prop>
+                <prop key="hibernate.c3p0.max_statements">50</prop>
+                <prop key="hibernate.c3p0.idle_test_period">300</prop>
+                <prop key="hibernate.enable_lazy_load_no_trans">true</prop>
+            </props>
+         </property>
+	</bean>
+	
+	<context:component-scan base-package = "main.ems"/>
+	
+	<tx:annotation-driven proxy-target-class = "true" transaction-manager = "transactionManager"/>
+	
+	<task:annotation-driven/>
+	
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager" p:sessionFactory-ref="sessionFactory" >
+  	</bean>
+	
+	
+</beans>

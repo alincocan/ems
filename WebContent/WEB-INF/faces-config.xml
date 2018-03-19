@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+    http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+
+    <application>
+        <el-resolver>
+            org.springframework.web.jsf.el.SpringBeanFacesELResolver
+        </el-resolver>
+        
+        <resource-bundle>
+            <base-name>com/main/resources/i18n</base-name>
+            <var>bundle</var>
+        </resource-bundle>
+        
+        <locale-config>
+            <default-locale>ro</default-locale>
+            <supported-locale>en</supported-locale>
+        </locale-config>
+        
+    </application> 
+   
+    <navigation-rule>
+        <from-view-id>login.xhtml</from-view-id>
+        <navigation-case>
+            <from-action>#{userBean.doLogin}</from-action>
+            <from-outcome>home</from-outcome>
+            <to-view-id>pages/home.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/job.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>jobs</from-outcome>
+            <to-view-id>pages/jobs.xhtml</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+     <navigation-rule>
+        <from-view-id>pages/jobs.xhtml</from-view-id>
+        <navigation-case>
+            <from-outcome>addJob</from-outcome>
+            <to-view-id>pages/job.xhtml</to-view-id>
+          
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+    	<from-view-id>pages/departments.xhtml</from-view-id>
+    	<navigation-case>
+    		<from-outcome>department</from-outcome>
+    		<to-view-id>pages/department.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    
+     <navigation-rule>
+    	<from-view-id>pages/department.xhtml</from-view-id>
+    	<navigation-case>
+    		<from-outcome>departments</from-outcome>
+    		<to-view-id>pages/departments.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+    	<from-view-id>pages/employee.xhtml</from-view-id>
+    	<navigation-case>
+    		<from-outcome>employees</from-outcome>
+    		<to-view-id>pages/employees.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+    	<from-view-id>pages/employees.xhtml</from-view-id>
+    	<navigation-case>
+    		<from-outcome>employee</from-outcome>
+    		<to-view-id>pages/employee.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+    	<from-view-id>pages/request.xhtml</from-view-id>
+    	<navigation-case>
+    		<from-outcome>request</from-outcome>
+    		<to-view-id>pages/request.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    
+     <navigation-rule>
+    	<from-view-id>*</from-view-id>
+    	<navigation-case>
+    		<from-outcome>ownRequest</from-outcome>
+    		<to-view-id>pages/ownRequests.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+     
+     <navigation-rule>
+    	<from-view-id>*</from-view-id>
+    	<navigation-case>
+    		<from-outcome>approveRequest</from-outcome>
+    		<to-view-id>pages/approveRequest.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    
+     <navigation-rule>
+    	<from-view-id>*</from-view-id>
+    	<navigation-case>
+    		<from-outcome>history</from-outcome>
+    		<to-view-id>pages/history.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+
+     <navigation-rule>
+    	<from-view-id>*</from-view-id>
+    	<navigation-case>
+    		<from-outcome>home</from-outcome>
+    		<to-view-id>pages/home.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    
+     <navigation-rule>
+    	<from-view-id>*</from-view-id>
+    	<navigation-case>
+    		<from-outcome>approveBonus</from-outcome>
+    		<to-view-id>pages/approve-bonus.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+    	<from-view-id>*</from-view-id>
+    	<navigation-case>
+    		<from-outcome>bonusProposed</from-outcome>
+    		<to-view-id>pages/bonus-proposed.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    <navigation-rule>
+    	<from-view-id>/pages/taxes.xhtml</from-view-id>
+    	<navigation-case>
+    	 	<from-action>#{taxesBean.toAdd()}</from-action>
+    		<from-outcome>fee</from-outcome>
+    		<to-view-id>pages/fee.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+    	<from-view-id>/pages/fee.xhtml</from-view-id>
+    	<navigation-case>
+    	 	<from-action>#{taxesBean.goBack()}</from-action>
+    		<from-outcome>taxes</from-outcome>
+    		<to-view-id>pages/taxes.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    	
+    	
+    </navigation-rule>
+    
+    <navigation-rule>
+    	<from-view-id>/pages/fee.xhtml</from-view-id>
+    	<navigation-case>
+    	 	<from-action>#{taxesBean.updateFee()}</from-action>
+    		<from-outcome>taxes</from-outcome>
+    		<to-view-id>pages/taxes.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    
+     <navigation-rule>
+    	<from-view-id>/pages/vacancy.xhtml</from-view-id>
+    	<navigation-case>
+    	 	<from-action>#{vacancyBean.addVacancy()}</from-action>
+    		<from-outcome>vacancies</from-outcome>
+    		<to-view-id>pages/vacancies.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+    	<from-view-id>/pages/vacancies.xhtml</from-view-id>
+    	<navigation-case>
+    		<from-outcome>vacancy</from-outcome>
+    		<to-view-id>pages/vacancy.xhtml</to-view-id>
+    		<redirect/>
+    	</navigation-case>
+    </navigation-rule>
+</faces-config>

@@ -1,0 +1,18 @@
+.show:hover .well{
+	display:block;
+}
+.well {
+	margin-left:-400px;
+	display:none;
+	z-index:100;
+	position:absolute;
+}
+.show:hover .img-menu{
+	display:none;
+}
+.show {
+	width:100px;
+	margin-left:50%;
+		margin-top:-30px;
+	position:absolute;
+}

@@ -1,0 +1,21 @@
+/* =====Login=====*/
+
+.login-width {
+	margin-top: 100px;
+	width: 30%;
+	margin-left:auto;
+	margin-right:auto;
+
+}
+
+
+.panel-heading {
+	padding: 5px 15px;
+}
+.form-inline {
+	margin: 5px
+}
+
+body {
+	background-color:#00498F !important;
+}
