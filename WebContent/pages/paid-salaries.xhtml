@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	
+</h:head>
+   
+<h:body>	
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<div id = "wrapper">
+		 <ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset id = "addBonus" header = "#{bundle['psb.paidSalaries']}" legend = "#{bundle['psb.paidSalaries']}" styleClass = "dataContent effect2">
+				<div class = "div-width" style = "text-align:center">
+					<br/><br/>
+					<p:tabView>
+						<p:tab title = "#{bundle['psb.history']}">
+					    		
+							<p:dataTable value = "#{paySalariesBean.salariesDistinctByDate}" var  = "sal" type="definition" paginator = "true" 
+						 				 rows="10"
+						 				 paginatorPosition = "bottom"
+						 				 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						                 rowsPerPageTemplate="5,10,15">	
+								<p:column>
+						            <p:panel id="toggleable" header="#{paySalariesBean.formatDate(sal)}" toggleable="true" toggleOrientation="vertical" collapsed="true" style="margin-bottom:20px">
+			 							<div style = "width:90%;margin-left:auto;margin-right:auto">
+				 							<p:dataTable value = "#{paySalariesBean.salariesByDate(sal)}" var = "salary" paginator = "true" 
+							 				 rows="10"
+							 				 paginatorPosition = "bottom"
+							 				 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+							                 rowsPerPageTemplate="5,10,15">
+				 								<p:column style = "width:40px">
+				 									 <h:outputLink value="../DisplayImage?Image_id=#{emp.userId}" target="_blank" >
+					                        				<h:graphicImage value="../DisplayImage?Image_id=#{salary.user.userId}" width="40" height="40"></h:graphicImage>
+					                    				</h:outputLink>
+				 								</p:column>
+				 								<p:column headerText = "#{bundle['employees.lastName']}">
+				 									<h:outputText value = "#{salary.user.lastName}"/>
+				 								</p:column>
+				 								<p:column headerText = "#{bundle['employees.firstName']}">
+				 									<h:outputText value = "#{salary.user.firstName}"/>
+				 								</p:column>
+				 								<p:column headerText = "#{bundle['psb.netSal']}">
+				 									<h:outputText value = "#{salary.salary}"/>
+				 								</p:column>
+				 								<p:column style = "width:50px">
+				 									<h:graphicImage value = "../resources/images/check.png" style = "width:50px;height:50px"/>
+				 								</p:column>
+				 							</p:dataTable>
+			 							</div>
+			 						</p:panel>
+			 					</p:column>
+							</p:dataTable>
+						</p:tab>
+					</p:tabView>
+				</div>
+			</p:fieldset>
+			<br/><br/><br/>
+			<div id = "footer">
+				<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>	

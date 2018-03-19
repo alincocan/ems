@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	
+</h:head>
+   
+<h:body>
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<h:outputStylesheet library="css" name="department.css" />
+	<div id="wrapper">
+		 <ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+		<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset id = "addJob" header = "#{bundle['request.yourRequests']}" legend = "#{bundle['request.yourRequests']}" styleClass = "dataContent effect2">
+				<p:contextMenu for = "ownRequests">
+		    			<p:menuitem id="detailsId" value = "#{bundle['request.details']}" oncomplete = "PF('reqDetails').show()" update = ":form"/>
+		    	</p:contextMenu>
+				<p:dataTable  id = "ownRequests"
+							  value = "#{holidayRequestBean.ownRequests}" 
+							  var = "req"
+							  paginator = "true"
+							  paginatorPosition="bottom"
+		 				 	  rows="10"
+		 				 	  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                 	  rowsPerPageTemplate="5,10,15"
+		                 	  selectionMode="single" 
+		                 	  selection="#{holidayRequestBean.selectedRequest}" 
+		                 	  rowKey="#{req.id}"
+							  style = "text-align:center"
+							  emptyMessage = "#{bundle['general.noRecords']}"
+							  >
+					<p:ajax event = "rowSelect" update = ":form" />
+					<f:facet name = "header" >
+						<h:outputText value = "#{bundle['request.yourRequests']}" />
+					</f:facet>
+					<p:column headerText = "#{bundle['request.type']}" >
+						<h:outputText value = "#{req.requestType ==1? bundle['request.leaveTypeRest']: bundle['request.leaveTypePaidDaysOff']}"/>
+					</p:column>
+					<p:column headerText = "#{bundle['request.startDate']}">
+						<h:outputText value = "#{req.startDate}">
+							<f:convertDateTime pattern="dd/MM/yy"/>
+						</h:outputText>
+					</p:column>
+					<p:column headerText = "#{bundle['request.endDate']}" >
+						<h:outputText value = "#{req.endDate}">
+							<f:convertDateTime pattern="dd/MM/yy"/>
+						</h:outputText>
+					</p:column>
+					<p:column headerText = "#{bundle['request.substitute']}">
+						<h:outputText value = "#{req.substitute}" />
+					</p:column>
+					<p:column headerText = "#{bundle['request.manager']}">
+						<h:outputText value = "#{req.manager}" />
+					</p:column>
+					<p:column headerText = "#{bundle['request.state']}">
+						<h:outputText value = "#{bundle['request.waiting']}" rendered = "#{req.state == 0}"/>
+						<h:outputText value = "#{bundle['request.approvedBySubsitute']}" rendered = "#{req.state == 1}"/>
+						<h:outputText value = "#{bundle['request.approvedByManager']}" rendered = "#{req.state == 2}"/>
+						<h:outputText value = "#{bundle['request.pending']}" rendered = "#{req.state == 3}"/>
+						<h:outputText value = "#{bundle['request.finished']}" rendered = "#{req.state == 4}"/>
+						<h:outputText value = "#{bundle['request.rejectedBySubstitute']}" rendered = "#{req.state == 5}"/>
+						<h:outputText value = "#{bundle['request.rejectedByManager']}" rendered = "#{req.state == 6}"/>
+					</p:column>
+					<p:column>
+		    			<p:commandButton id="deleteId" value = "#{bundle['request.cancel']}" actionListener = "#{holidayRequestBean.cancelRequest(req)}" update = ":form" disabled="#{req.state le 2 == false}" icon="ui-icon-closethick" >
+			    			<p:confirm header="#{bundle['request.confirmation']}" message="#{bundle['request.confirm']}" icon="ui-icon-alert" />
+			    		</p:commandButton>
+					</p:column>
+				</p:dataTable>
+				<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+	        		<p:commandButton value="#{bundle['request.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+	        		<p:commandButton value="#{bundle['request.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	    		</p:confirmDialog>
+	    		<p:dialog id = "dialog" header="#{bundle['request.requestDetails']}" widgetVar="reqDetails" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="500"> 
+	    			<center><h:outputText value = "#{bundle['request.request']}" style = "font-size:25px;font-family:Comic Sans MS, cursive, sans-serif"/></center>
+	    				<br/>
+	    			<h:panelGrid columns = "2" cellpadding = "10" style = "margin-left:auto;margin-right:auto">
+	    				<h:outputText value = "#{bundle['request.type']}:"/>
+	    				<h:outputText value = "#{holidayRequestBean.selectedRequest.requestType ==1? bundle['request.leaveTypeRest']: bundle['request.leaveTypePaidDaysOff']}"/>
+	    				
+	    				<h:outputText value = "#{bundle['request.startDate']}:"/>
+	    				<h:outputText value = "#{holidayRequestBean.selectedRequest.startDate}">
+	    					<f:convertDateTime pattern="dd/MM/yy" />
+	    				</h:outputText>
+	    				
+	    				<h:outputText value = "#{bundle['request.endDate']}:"/>
+	    				<h:outputText value = "#{holidayRequestBean.selectedRequest.endDate}">
+	    					<f:convertDateTime pattern="dd/MM/yy" />
+	    				</h:outputText>
+	    				
+	    				<h:outputText value = "#{bundle['request.daysNumber']}:"/>
+	    				<h:outputText value = "#{holidayRequestBean.selectedRequest.daysNumber}"/>
+	    				
+	    				<h:outputText value = "#{bundle['request.requestDate']}:"/>
+	    				<h:outputText value = "#{holidayRequestBean.selectedRequest.requestDate}">
+	    					<f:convertDateTime pattern="dd/MM/yy" />
+	    				</h:outputText>
+	    				
+	    				<h:outputText value = "#{bundle['request.substitute']}:"/>
+	    				<p:lightBox>
+	    					<h:outputLink value="../DisplayImage?Image_id=#{holidayRequestBean.selectedRequest.substitute.userId}" target="_blank"  >
+	    						<h:outputText value = "#{holidayRequestBean.selectedRequest.substitute}"/>
+	    					</h:outputLink>
+	    				</p:lightBox>
+	    				<h:outputText value = "#{bundle['request.manager']}:"/>
+	    				<p:lightBox>
+	    					<h:outputLink value="../DisplayImage?Image_id=#{holidayRequestBean.selectedRequest.manager.userId}" target="_blank"  >
+	    						<h:outputText value = "#{holidayRequestBean.selectedRequest.manager}"/>
+	    					</h:outputLink>
+	    				</p:lightBox>
+	    			</h:panelGrid>
+					
+					
+	    				    			
+	    		</p:dialog>
+			</p:fieldset>
+			<br/><br/><br/>
+			<div id = "footer">
+			 	<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>

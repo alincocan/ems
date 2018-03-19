@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	
+</h:head>
+   
+<h:body>	
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<div id = "wrapper">
+		 <ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset id = "addBonus" header = "#{bundle['psb.myPaidSalaries']}" legend = "#{bundle['psb.myPaidSalaries']}" styleClass = "dataContent effect2">
+				<div class = "div-width" style = "text-align:center">
+					<p:tabView>
+						<p:tab title = "#{bundle['psb.myPaidSalaries']}">
+							<p:dataTable value = "#{paySalariesBean.myPaidSalaries}" var = "salary" paginator = "true" 
+						 				 rows="5"
+						 				 paginatorPosition = "bottom"
+						 				 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						                 rowsPerPageTemplate="5,10,15">
+								<p:column>
+									<p:panel>
+										<h:panelGrid columns = "3" >
+											<h:graphicImage value = "../resources/images/money.png" style = "width:100px;height:100px"/>
+											<h:outputText value = "#{bundle['psb.salaryDate']}: #{paySalariesBean.formatDate(salary.salaryDate)}"/>
+											<h:outputText value = "#{bundle['bonus.value']}: #{salary.salary}"/>
+										</h:panelGrid>
+									</p:panel>
+								</p:column>
+							</p:dataTable>
+						</p:tab>
+					</p:tabView>
+				</div>
+			</p:fieldset>
+			<br/><br/><br/>
+			<div id = "footer">
+				<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>

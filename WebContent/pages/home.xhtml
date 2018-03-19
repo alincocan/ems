@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+
+</h:head>
+    
+<h:body>
+	<h:outputStylesheet name="webjars/font-awesome/4.4.0/css/font-awesome.css"/>
+	<h:outputStylesheet library="css" name="home.css" />
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<div id="wrapper">
+		<ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form>  
+		
+		    <p:growl id="messages" globalOnly = "true"/>
+		    <br/>
+		    <div class = "dataContent effect2" style = "padding:0">
+				<br/>
+				<center><img src = "../resources/images/home.jpg" style = " width:100%"/></center>
+				<div style = "height:150px;width:400px;margin-left:auto;margin-right:auto;text-align:center">
+				<br/>
+					<h:outputText value = "#{bundle['home.welcome']}" style = "margin-top:40px;color:white;font-size:25px;font-family:Comic Sans MS, cursive, sans-serif"/>
+				<br/>
+				</div>
+			</div>
+			<br/><br/><br/>
+			<div id = "footer">
+			 	<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>

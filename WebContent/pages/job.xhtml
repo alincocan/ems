@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	
+</h:head>
+   
+<h:body>
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<h:outputStylesheet library="css" name="job.css" />
+	<div id = "wrapper">
+		 <ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+				<p:fieldset id = "addJob" header = "#{bundle['job.job']}" legend = "#{bundle['job.job']}"  styleClass = "dataContent effect2">
+				    <div class = "addJob">
+					    <div class="ui-grid ui-grid-responsive">
+					     	<p:tabView>
+					    		<p:tab title = "#{jobBean.editButtonGenerator==false? bundle['job.addJob']:bundle['job.editJob']}">
+					    		
+					    		<p:message for = "jobName"/>
+					    		<p:message for = "jobDesc"/>
+				    			<h:panelGrid columns = "2" cellpadding = "10">
+					    			<h:outputText value = "#{bundle['jobs.jobName']}" />
+					    		
+					    			<p:inputText id="jobName" value = "#{jobBean.jobName}" required = "true" requiredMessage = "#{bundle['job.nameRequired']}"  />
+					    			
+					    		
+					    			<h:outputText value = "#{bundle['jobs.jobDescription']}" />
+					    		
+					    			<p:inputTextarea id="jobDesc" value = "#{jobBean.jobDescription}" rows = "10" cols = "20" required = "true" requiredMessage = "#{bundle['job.descriptionRequired']}"  />
+					    			
+					    		
+					    			<p:commandButton style = "font-weight:none !important" styleClass = "margin-button" value = "#{bundle['job.addJob']}"  action = "#{jobBean.addJob}" ajax = "false" outcome = "jobs" rendered = "#{not jobBean.editButtonGenerator}"/>
+					    			<p:commandButton style = "font-weight:none !important" styleClass = "margin-button" value = "#{bundle['job.editJob']}"  action = "#{jobBean.editJob}" ajax = "false" outcome = "jobs" rendered = "#{jobBean.editButtonGenerator}"/>
+				    			</h:panelGrid>
+				    		</p:tab>
+				    	</p:tabView>
+				    </div>
+			    </div>
+			    <p:button value = "#{bundle['job.back']}"  outcome = "jobs"/>
+			</p:fieldset>	
+			<br/><br/><br/>
+			<div id = "footer">
+		 		<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>

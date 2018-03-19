@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<style>
+		.empPGrid {
+			width:100%;
+		}
+		.col1 {
+			width:40%;
+		}
+		.col2 {
+			width:60%;
+		}
+		.addBonus {
+			width:70%;
+			margin-left:auto;
+			margin-right:auto;
+		}
+	</style>
+</h:head>
+   
+<h:body>	
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<div id = "wrapper">
+		 <ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset id = "chart" header = "#{bundle['taxes.taxes']}" legend = "#{bundle['taxes.taxes']}" styleClass = "dataContent effect2">
+				<p:chart type="line" model = "#{holidayChartBean.lineModel}" style = "height:300px"/>
+			</p:fieldset>
+		</h:form>
+	</div>
+</h:body>
+</html>

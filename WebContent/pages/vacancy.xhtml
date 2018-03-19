@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<style>
+		.col-10 {
+			width:30%;
+		}
+		.col-90 {
+			width:70%;
+		}
+	</style>
+</h:head>
+    
+<h:body>
+	<f:event type="preRenderView" listener="#{departmentBean.initDepartmentPage}"/>
+	<h:outputStylesheet library="css" name="departments.css" />
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<div id="wrapper">
+		<ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id = "form">  
+		<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+		<p:fieldset legend="#{bundle['departments.departmentsList']}" styleClass = "dataContent effect2"> 
+			<div class="ui-grid ui-grid-responsive margin-grid">
+			  
+			    		<div>
+			    			<p:tabView>
+								<p:tab title = "#{bundle['vacancy.vacancies']}">
+									<div style = "width:80%;margin-left:auto;margin-right:auto">
+										<h:panelGrid columns = "2" columnClasses = "col1,col2" style = "width:100%">
+											<h:outputText value = "#{bundle['jobs.jobName']}" />
+											<p:selectOneMenu value = "#{vacancyBean.vacancy.job}" style = "width:150px"  converter="omnifaces.SelectItemsConverter">
+												<f:selectItems value = "#{vacancyBean.getJobs()}"/>
+											</p:selectOneMenu>
+											
+											<h:outputText value = "#{bundle['vacancy.number']}" />
+											<h:inputText value = "#{vacancyBean.vacancy.numberOfPositions}" style = "width:50px"/>
+											
+											<h:outputText value = "#{bundle['vacancy.responsabilities']}" />
+											<p:dataList value = "#{vacancyBean.responsabilitiesList}" var = "resp" style = "width:100px">
+												<h:outputText value = "#{resp.value}" />
+											</p:dataList>
+											
+											<h:outputText value = ""/>
+											<h:panelGrid columns = "2" columnClasses = "col1,col2">
+												<p:commandButton value = "Add" actionListener = "#{vacancyBean.addResponsabilityToList}" update = ":form"/>
+												<h:inputText value = "#{vacancyBean.responsability.value}" style = "width:300px"/>
+											</h:panelGrid>
+											
+											<h:outputText value = "#{bundle['vacancy.skillsReq']}" />
+											<p:dataList value = "#{vacancyBean.skillsRequiredList}" var = "skills" style = "width:100px">
+												<h:outputText value = "#{skills.value}" />
+											</p:dataList>
+											
+											<h:outputText value = ""/>
+											<h:panelGrid columns = "2" columnClasses = "col1,col2">
+												<p:commandButton value = "Add" actionListener = "#{vacancyBean.addSkillsRequiredToList}" update = ":form"/>
+												<h:inputText value = "#{vacancyBean.skillRequired.value}" style = "width:300px"/>
+											</h:panelGrid>
+											
+											<h:outputText value = "#{bundle['vacancy.additReq']}" />
+											<p:dataList value = "#{vacancyBean.additionalRequirementsList}" var = "skills" style = "width:100px">
+												<h:outputText value = "#{skills.value}" />
+											</p:dataList>
+											
+											<h:outputText value = ""/>
+											<h:panelGrid columns = "2" columnClasses = "col1,col2">
+												<p:commandButton value = "Add" actionListener = "#{vacancyBean.addAdditionalRequirementsToList}" update = ":form"/>
+												<h:inputText value = "#{vacancyBean.additionalRequirement.value}" style = "width:300px"/>
+											</h:panelGrid>
+										</h:panelGrid>
+										
+										<p:commandButton value = "Add vacancy" action  = "#{vacancyBean.addVacancy}" ajax = "false" />
+									</div>
+								</p:tab>
+							</p:tabView>
+						</div>
+					</div>
+				</p:fieldset>
+				<br/><br/><br/>
+			<div id = "footer">
+			 	<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+			</h:form>
+		</div>
+	</h:body>
+</html>

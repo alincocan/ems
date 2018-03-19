@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<style type="text/css">
+        .ui-widget,.ui-widget .ui-widget {
+            font-size: 90% !important;
+        }
+        .col-10 {
+			width:12%;
+		}
+		.col-90 {
+			width:88%;
+		}
+       
+    </style>
+</h:head>
+    
+<h:body>
+	<f:event type="preRenderView" listener="#{jobBean.initJobPage}"/>
+	<h:outputStylesheet library="css" name="jobs.css" />
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<div id="wrapper">
+		<ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+		<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset legend="#{bundle['jobs.jobsList']}" styleClass = "dataContent effect2"> 
+				<div class="ui-grid ui-grid-responsive margin-grid">
+			    	<div class="ui-grid-row">
+			    		<div class="ui-grid-col-6"> 
+			    			<div class = "job-table">
+			    				<p:contextMenu for = "jobsList">
+			    					<p:menuitem id="detailsId" value = "#{bundle['jobs.details']}" oncomplete="PF('jobDetails').show()" update = ":form:dialog"/>
+			    					<p:menuitem id="editId" value = "#{bundle['jobs.edit']}" action = "#{jobBean.toEdit()}"/>
+			    					<p:menuitem id="deleteId" value = "#{bundle['jobs.delete']}" actionListener = "#{jobBean.deleteJob}" update = ":form">
+				    					<p:confirm header="#{bundle['jobs.confirmation']}" message= "#{bundle['jobs.confirm']}" icon="ui-icon-alert" />
+				    				</p:menuitem>
+			    				</p:contextMenu>
+				    			<p:dataTable styleClass = "job-table wideList" id = "jobsList"  value = "#{jobBean.jobs}" var = "job" 
+				    					  	 paginator = "true" 
+				    					  	 paginatorPosition="bottom"
+			 				 				 rows="10"
+			 				 				 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			                 				 rowsPerPageTemplate="5,10,15"
+			                 				 selectionMode="single" 
+			                 				 selection="#{jobBean.jobSelected}" 
+			                 				 rowKey="#{job.jobId}"
+			                 				 >
+				    				
+			    					<p:ajax event="rowSelect" listener="#{jobBean.onRowSelect}" update=":form:messages :form:empTab :form:dialog" />
+				    				<p:column headerText = "#{bundle['jobs.jobName']}" filterBy = "#{job.jobName}" filterMatchMode = "contains" update = ":form:empTab">
+				    					<h:outputText value = "#{job.jobName}"></h:outputText>
+				    				</p:column>
+				    				<f:facet name="header">
+										<h:outputText value = "#{bundle['jobs.jobsList']}" />
+				    				</f:facet>
+				    				
+				    			</p:dataTable>
+				    			<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		        					<p:commandButton value="#{bundle['jobs.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        					<p:commandButton value="#{bundle['jobs.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+		    					</p:confirmDialog>
+				    			<br/>
+				    			<p:dialog id = "dialog" header="#{bundle['jobs.jobDetails']}" widgetVar="jobDetails" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="500">
+		        					<p:outputPanel id="multiCarDetail" style="text-align:left;">
+		        						<div class="ui-grid ui-grid-responsive margin-grid">
+			    							<div class="ui-grid-row">
+			    								<div class="ui-grid-col-4"> 
+			    									<h:outputText value = "#{bundle['jobs.jobName']}" style = "font-weight:bold"/>
+			    								</div>
+			    								<div class="ui-grid-col-8"> 
+			    									<h:outputText value = "#{jobBean.jobSelected}" />
+			    								</div>
+			    							</div>
+			    							<p:separator/>
+			    							<div class="ui-grid-row">
+			    								<div class="ui-grid-col-4"> 
+			    									<h:outputText value = "#{bundle['jobs.jobDescription']}" style = "font-weight:bold" />
+			    								</div>
+			    								<div class="ui-grid-col-8"> 
+			    									<h:outputText value = "#{jobBean.jobSelected.jobDescription}" style="word-wrap:break-word;"/>
+			    								</div>
+			    							</div>
+			    						</div>
+		        						<br/>
+		        					</p:outputPanel>
+		    					</p:dialog>
+			    			</div>
+			    		</div>
+			    	
+			    	
+			    		<div class="ui-grid-col-6"> 
+			    			<p:dataTable id="empTab" styleClass = "emp-table" emptyMessage = "Nici o inregistrare" value = "#{jobBean.employees}" var = "employee">
+			    				<f:facet name="header">
+									<h:outputText value = "#{bundle['jobs.employees']}"/>
+								</f:facet>
+								<p:column>
+								<p:panelGrid columns = "2" columnClasses="col-10,col-90" border = "0">
+									<p:graphicImage value = "../DisplayImage?Image_id=#{employee.userId}" width = "20" height = "30"/>
+									<h:outputText value = "#{employee.lastName} #{employee.firstName}" />
+								</p:panelGrid>
+								
+							</p:column>
+			    			</p:dataTable>
+			    		</div>
+			    	</div>
+			    </div>
+			    <p:button id="addId" value = "#{bundle['jobs.add']}" icon = "fa fa-fw fa-plus" outcome = "addJob" ajax="false"/>   			
+			</p:fieldset>
+			<br/><br/><br/>
+			<div id = "footer">
+				<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>
