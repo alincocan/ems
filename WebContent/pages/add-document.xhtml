@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	
+</h:head>
+   
+<h:body style = "height:200px">
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<h:outputStylesheet library="css" name="department.css" />
+	
+	
+		<h:form id="form">  
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset header = "#{bundle['departments.add']}" legend = "#{bundle['departments.add']}" styleClass = "dataContent2 effect2" style = "margin-top:100px">
+	   			<p:fileUpload fileUploadListener="#{documentBean.handleFileUpload}" mode="advanced" update=":form:messages" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" ajax = "true" value = "#{employeeBean.uploadFile}" label = "Browse"/>
+			</p:fieldset>
+		</h:form>
+
+</h:body>
+</html>
+		
