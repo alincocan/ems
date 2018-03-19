@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<style>
+		
+	</style>
+</h:head>
+   
+<h:body>	
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<div id = "wrapper">
+		 <ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+		
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset id = "taxes" header = "#{bundle['taxes.taxes']}" legend = "#{bundle['taxes.taxes']}" styleClass = "dataContent effect2">
+			
+				<div class="ui-grid-row">
+				    <div class="ui-grid-col-6"> 
+				    
+						<p:dataTable id = "empsList"  value = "#{taxesBean.employees}" var = "emp" 
+			    					  	 paginator = "true" 
+			    					  	 paginatorPosition="bottom"
+		 				 				 rows="10"
+		 				 				 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                 				 rowsPerPageTemplate="5,10,15"
+		                 				 selectionMode="single" 
+		                 				 selection="#{taxesBean.selectedEmployee}" 
+		                 				 rowKey="#{emp.userId}"
+		                 				 emptyMessage = "#{bundle['general.noRecords']}"
+		                 				 disabled = "true"
+		                 				 style = "width:70%;margin-left:auto;margin-right:auto"
+		                 				 >
+		                 				 <p:ajax event = "rowSelect" update = "form"/>
+		                 	<p:ajax event = "rowSelect" listener = "#{taxesBean.onEmployeeChange}"/>
+		                 	<f:facet name="header">
+		                 		<h:outputText value = "#{bundle['employees.employeesList']}"/>
+		                 	</f:facet>
+		                 	<p:column style = "width:50px">
+			                 	<h:outputLink value="../DisplayImage?Image_id=#{emp.userId}" target="_blank" >
+		                        	<h:graphicImage value="../DisplayImage?Image_id=#{emp.userId}" width="40" height="40"></h:graphicImage>
+		                    	</h:outputLink>
+		                 	</p:column>
+		                 	<p:column filterBy = "#{emp}" filterMatchMode = "contains">
+		                 		<h:outputText value = "#{emp}"/>
+		                 	</p:column>
+		                 </p:dataTable>
+					</div>
+					
+					<div class = "ui-grid-col-6">
+						<div  style = "width:70%;margin-left:auto;margin-right:auto"> 
+							
+									<p:dataTable id = "fee1" value = "#{taxesBean.taxes}" var = "tax"  selectionMode="single"  selection = "#{taxesBean.selectedFee}" rowKey = "#{tax.id}" rendered = "#{taxesBean.selectedEmployee !=null}">
+										<p:ajax event = "rowSelect" update = ":form:add"/>
+										<f:facet name="header">
+											<h:outputText value = "Unallocated taxes" />
+										</f:facet>
+										<p:column headerText = "#{bundle['taxes.name']}">
+											<h:outputText value = "#{tax.name}" />
+										</p:column>
+										
+										<p:column headerText = "#{bundle['taxes.value']}">
+											<h:outputText value = "#{tax.value}"/>
+										</p:column>
+										<p:column headerText = "#{bundle['taxes.type']}" style = "text-align:center">
+											<h:outputText value = "#{tax.type}"/>
+										</p:column>
+										
+										<p:column headerText = "#{bundle['taxes.add']}/ #{bundle['taxes.substract']}" style = "white-space: pre-wrap;text-align:center">
+											<h:outputText value = "#{tax.type2}"></h:outputText>
+										</p:column>
+									</p:dataTable>
+
+							<br/>
+							<p:commandButton id = "add" value = "Add" actionListener = "#{taxesBean.updateTaxesForEmployee}" update = ":form" icon = "fa fa-long-arrow-down" rendered = "#{taxesBean.selectedEmployee !=null}" disabled = "#{taxesBean.selectedFee == null}"/>
+							<p:commandButton id = "remove" value = "Remove" actionListener = "#{taxesBean.deleteEmployeeTaxes}" update = ":form" icon = "fa fa-long-arrow-up" rendered = "#{taxesBean.selectedEmployee !=null}" disabled = "#{taxesBean.selectedFeeFromEmp == null}"/>
+							<br/>
+							<br/>
+							
+									<p:dataTable id = "fee2" value = "#{taxesBean.selectedEmployee.taxes}" var = "tax" selectionMode="single" selection = "#{taxesBean.selectedFeeFromEmp}" rowKey = "#{tax.id}" rendered = "#{taxesBean.selectedEmployee !=null}">
+										<p:ajax event = "rowSelect" update = ":form:remove"/>
+										<f:facet name="header">
+											<h:outputText value = "Selected employee taxes" />
+										</f:facet>
+										<p:column headerText = "#{bundle['taxes.name']}">
+											<h:outputText value = "#{tax.name}" />
+										</p:column>
+										
+										<p:column headerText = "#{bundle['taxes.value']}">
+											<h:outputText value = "#{tax.value}"/>
+										</p:column>
+										<p:column headerText = "#{bundle['taxes.type']}" style = "text-align:center">
+											<h:outputText value = "#{tax.type}"/>
+										</p:column>
+										
+										<p:column headerText = "#{bundle['taxes.add']}/ #{bundle['taxes.substract']}" style = "white-space: pre-wrap;text-align:center">
+											<h:outputText value = "#{tax.type2}"></h:outputText>
+										</p:column>
+									</p:dataTable>
+							<br/>
+						</div>
+					
+					
+					</div>
+				</div>
+			
+			</p:fieldset>
+			<br/><br/><br/>
+			<div id = "footer">
+			 	<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>	

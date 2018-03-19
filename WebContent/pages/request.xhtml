@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	
+</h:head>
+   
+<h:body>
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<h:outputStylesheet library="css" name="department.css" />
+	<div id = "wrapper">
+		 <ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset id = "addJob" header = "#{bundle['request.request']}" legend = "#{bundle['request.request']}" styleClass = "dataContent effect2">
+				<div class = "box-width" style = "width:50%">
+					<div class="ui-grid ui-grid-responsive">
+						<p:tabView>
+							<p:tab title = "#{bundle['request.addRequest']}">
+								<p:message for = "requestType"/>
+								<p:message for = "startDateH"/>
+								<p:message for = "endDate"/>
+							    <p:message for = "substitute"/>
+							    <h:panelGrid columns="2"  cellpadding="20">
+							    	<h:outputText value = "#{bundle['request.empName']}"/>
+							    	<p:inputText id = "emp" disabled = "true" value = "#{holidayRequestBean.getUserBean().user}"/>
+							    	
+							    	
+							    	<h:outputText value = "#{bundle['request.type']}"/>
+							    	<p:selectOneListbox id = "requestType" layout="pageDirection" value="#{holidayRequestBean.holidayRequest.requestType}" required="true" requiredMessage="#{bundle['request.chooseLeaveType']}">
+							    		<f:selectItem itemLabel = "#{bundle['request.leaveTypeRest']}" itemValue = "1"/>
+							    		<f:selectItem itemLabel = "#{bundle['request.leaveTypePaidDaysOff']}" itemValue = "2"/>
+							    	</p:selectOneListbox>
+							    	
+							    	
+							    	<h:outputText value = "#{bundle['request.startDate']}" />
+							    	<p:calendar id = "startDateH" mode="popup" pattern="yyyy-MMM-dd" value = "#{holidayRequestBean.holidayRequest.startDate}" required = "true" requiredMessage = "#{bundle['request.sdReq']}">
+							    	
+							    	</p:calendar>
+							    	
+							    	
+							    	<h:outputText value = "#{bundle['request.endDate']}" />
+							    	<p:calendar id = "endDate" mode="popup" pattern="yyyy-MMM-dd"  value = "#{holidayRequestBean.holidayRequest.endDate}" required = "true" requiredMessage = "#{bundle['request.edReq']}">
+							    	</p:calendar>
+							    
+							    	<h:outputText value = "#{bundle['request.substitute']}" />
+							    	<p:selectOneMenu id = "substitute" style = "width:130px" value = "#{holidayRequestBean.holidayRequest.substitute}" efect = "fold" filter="true" filterMatchMode="contains" ajax = "false" converter="omnifaces.SelectItemsConverter" required = "true" requiredMessage = "#{bundle['request.sReq']}">
+							    		<f:selectItem itemValue = "" itemLabel = "--None--" />
+							    		<f:selectItems value = "#{holidayRequestBean.substitutes}" />
+							    	</p:selectOneMenu>
+							    
+							    	
+							    	<h:outputText value = "#{bundle['request.manager']}" />
+							    	<p:inputText id = "manager" disabled = "true" value = "#{holidayRequestBean.getUserBean().user.department.managerId}" />
+							    	
+							    </h:panelGrid>
+							    
+							    <p:commandButton value = "#{bundle['request.addRequest']}" actionListener = "#{holidayRequestBean.addRequest}" ajax = "false"/>
+						    </p:tab>
+					    </p:tabView>
+					</div>
+				</div>
+			</p:fieldset>
+			<br/><br/><br/>
+			<div id = "footer">
+			 	<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>

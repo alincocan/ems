@@ -1,0 +1,86 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<style>
+		.empPGrid {
+			width:100%;
+		}
+		.col1 {
+			width:40%;
+		}
+		.col2 {
+			width:60%;
+		}
+		.addBonus {
+			width:70%;
+			margin-left:auto;
+			margin-right:auto;
+		}
+	</style>
+</h:head>
+   
+<h:body>	
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<div id = "wrapper">
+		 <ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset id = "taxes" header = "#{bundle['taxes.taxes']}" legend = "#{bundle['taxes.taxes']}" styleClass = "dataContent effect2">
+				<div style = "width:60%;margin-left:auto;margin-right:auto">
+					<p:dataTable id = "taxesList"
+							 				 value = "#{taxesBean.taxes}"
+							 				 var = "tax"
+							 				 emptyMessage = "#{bundle['general.noRecords']}">
+						<f:facet name="header">
+							<h:outputText value = "#{bundle['taxes.list']}" />
+						</f:facet>
+						<p:column headerText = "#{bundle['taxes.name']}" style = "text-align:center"> 
+							<h:outputText value = "#{tax.name}"/>
+						</p:column>
+						
+						<p:column headerText = "#{bundle['taxes.value']}" style = "text-align:center">
+							<h:outputText value = "#{tax.value}"/>
+						</p:column>
+						
+						<p:column headerText = "#{bundle['taxes.type']}" style = "text-align:center">
+							<h:outputText value = "#{tax.type}"/>
+						</p:column>
+						
+						<p:column headerText = "#{bundle['taxes.add']}/ #{bundle['taxes.substract']}" style = "white-space: pre-wrap;text-align:center">
+							<h:outputText value = "#{tax.type2}"></h:outputText>
+						</p:column>
+						<p:column style = "text-align:center;width:20%" >
+							<p:commandButton value = "#{bundle['taxes.delete']}" actionListener = "#{taxesBean.deleteFee(tax)}" update = ":form">
+								<p:confirm header="#{bundle['taxes.confirm']}" message="#{bundle['taxes.delMess']}" icon="ui-icon-alert" />
+							</p:commandButton>
+						</p:column>
+						<p:column style = "text-align:center;width:20%">
+					    	<p:commandButton value = "#{bundle['taxes.update']}" actionListener = "#{taxesBean.toUpdate(tax.id)}" ajax = "false"/> 
+						</p:column>
+					</p:dataTable>
+					<br/>
+					<p:commandButton value = "#{bundle['taxes.add']}" action = "#{taxesBean.toAdd()}" ajax = "false" style = "width:100px"/>
+					
+					<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		        					<p:commandButton value="#{bundle['employees.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        					<p:commandButton value="#{bundle['employees.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	    						</p:confirmDialog>
+	    			
+				</div>
+			</p:fieldset>
+			<br/><br/><br/>
+			<div id = "footer">
+			 	<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>
