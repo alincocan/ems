@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+    <f:view locale="#{localeBean.locale}">
+<h:head>
+	
+</h:head>
+    
+<h:body>
+
+<ui:composition>
+<h:outputStylesheet library="css" name="header.css" />
+<div class = "nav">
+	<h:form>
+	 <div class = "nav-menu">
+	 	<div class="ui-grid-row">
+	 		<div class = "ui-grid-col-1">
+		 		<div style = "width:100px;margin-left:auto;margin-right:auto;">
+			 		<p:lightBox>
+			    		 <h:outputLink value="../DisplayImage?Image_id=#{userBean.user.userId}" target="_blank"  >
+			             	<h:graphicImage value="../DisplayImage?Image_id=#{userBean.user.userId}" width="90" height="80" sytle = "margin-left:auto;margin-right:auto"></h:graphicImage>
+			             </h:outputLink>
+			        </p:lightBox>
+		        </div>
+	    	</div>
+		    <div class="ui-grid-col-4"> 
+		 		<img src = "../resources/images/ems-logo.png" alt= "img" height = "80px" width="100%"/>
+		 	</div>
+	 		
+	 		<div class="ui-grid-col-2"> 
+	 			<h:commandLink><img src = "../resources/images/ro.png" alt = "RO" height = "30"  style = "margin-top:20px;margin-right:10px;"/></h:commandLink>
+	    		<h:commandLink><img src = "../resources/images/uk.png" alt = "EN" height = "30"  style = "margin-top:20px;"/></h:commandLink>
+	    	</div>
+	    	
+	    	<div class="ui-grid-col-5" > 
+		    	<ui:fragment >
+		    		<div class = "tooltip">
+			    		<p:panel id="horizontal" header="#{bundle['header.notifications']}" toggleable="true" toggleOrientation="vertical" collapsed="true" style = "margin-top:20px;position:absolute;z-index:100;width:350px">
+				 			 <p:dataList  value = "#{notificationBean.notifications}" var="notif" type = "definition" emptyMessage = "No notifications">
+						      	<p:commandLink styleClass = "link" ajax = "false" action = "#{notificationBean.goToPage(notif.link)}" style = " text-decoration: none" selectionMode = "single">
+						      		<div class = "link" style = "border-bottom:1px solid grey;margin-left:10px">
+						      			<div class="ui-grid-row">
+			 								<div class = "ui-grid-col-4">
+			 									<h:graphicImage value="../DisplayImage?Image_id=#{notif.fromEmp.userId}" width="60" height="70" sytle = "margin-left:auto;margin-right:auto;"></h:graphicImage>
+				             		
+			 								</div>
+			 								<div class = "ui-grid-col-8">
+			 									<h:outputText value = "#{bundle[notif.message]} #{notif.fromEmp}" style = "font-size:15px;margin-bottom:10px;"/> 
+						      					<br/><br/>
+						      				 	<h:outputText value = "#{notif.notifDate}"> <f:convertDateTime pattern="dd/MM/yy HH:mm:ss"/> </h:outputText>
+						      				 	<br/><br/>
+			 								</div>
+			 							</div>
+						      		</div>
+						      	</p:commandLink>
+						    </p:dataList>
+		 				</p:panel>
+		    			<h:outputText rendered  = "#{notificationBean.notifications.size()>0}" styleClass = "tooltiptext" value = "#{notificationBean.notificationSize}" style="padding:6px"/>
+		    		</div>
+		    		
+		    	</ui:fragment>
+		    
+		    	
+	 			
+	 		</div>
+	    </div>
+	    <p:menubar>
+	        <p:submenu label="#{bundle['header.administration']}" icon="ui-icon-document" rendered = "#{userBean.isHrUser()}">
+	            <p:menuitem value=" #{bundle['header.departments']}" url="/pages/departments.xhtml" icon="ui-icon-folder-collapsed"/>
+	            <p:menuitem value=" #{bundle['header.employees']}" url="/pages/employees.xhtml" icon="ui-icon-note"/>
+	            <p:menuitem value=" #{bundle['header.jobs']}" url="/pages/jobs.xhtml" icon="ui-icon-note"/>
+	            <p:menuitem value=" #{bundle['header.employeesAllocation']}" url="/pages/employeesAssignation.xhtml" icon="ui-icon-transferthick-e-w"/>
+	        	 </p:submenu>
+	 
+	        <p:submenu label="#{bundle['header.holidayRequests']}" icon="ui-icon-pencil">
+	            <p:menuitem value="#{bundle['header.addRequest']}" url="/pages/request.xhtml" icon="ui-icon-arrowreturnthick-1-w" />
+	            <p:menuitem value="#{bundle['header.ownRequests']}" url="/pages/ownRequests.xhtml" icon="ui-icon-arrowreturnthick-1-w" />
+	            <p:menuitem value="#{bundle['header.approveRequest']}" url="/pages/approveRequest.xhtml" icon="ui-icon-arrowreturnthick-1-w" />
+	            <p:menuitem value="#{bundle['header.history']}" url="/pages/history.xhtml" icon="ui-icon-arrowreturnthick-1-e" />
+	        </p:submenu>
+	 
+	        <p:submenu label="#{bundle['header.documents']}" icon="ui-icon-note">
+	            <p:menuitem value="#{bundle['header.emplDocuments']}" url="/pages/documents.xhtml" icon="ui-icon-note" rendered = "#{userBean.isHrUser()}"/>
+	            <p:menuitem value="#{bundle['header.myDocuments']}" url="/pages/my-documents.xhtml" icon="ui-icon-note"/>
+	        </p:submenu>
+	 
+	        <p:submenu label="#{bundle['header.bonus']}" icon="ui-icon-gear">
+	           <p:menuitem value="#{bundle['header.addBonus']}" url="/pages/add-bonus.xhtml" icon="ui-icon-note" rendered = "#{userBean.isManager()}"/>
+	           <p:menuitem value="#{bundle['header.approveBonus']}" url="/pages/approve-bonus.xhtml" icon="ui-icon-note" rendered = "#{userBean.isManager()}"/>
+	           <p:menuitem value="#{bundle['header.bonusProposedByYou']}" url="/pages/bonus-proposed.xhtml" icon="ui-icon-note" rendered = "#{userBean.isManager()}"/>
+	        	<p:menuitem value="#{bundle['header.myBonuses']}" url="/pages/my-bonuses.xhtml" icon="ui-icon-note"/>
+	        </p:submenu>
+	 		
+	 		 <p:submenu label="#{bundle['header.salaries']}" icon="ui-icon-gear">
+	 		 	<p:menuitem value=" #{bundle['header.taxes']}" url = "taxes.xhtml" icon="ui-icon-transferthick-e-w" rendered = "#{userBean.isHrUser()}"/>
+	        	<p:menuitem value = "#{bundle['header.taxesAlloc']}" url  = "taxes-allocation.xhtml" icon="ui-icon-transferthick-e-w" rendered = "#{userBean.isHrUser()}"/>
+	       		<p:menuitem value = "#{bundle['header.salariesHist']}" url = "paid-salaries.xhtml" icon="ui-icon-transferthick-e-w" rendered = "#{userBean.isHrUser()}"/>
+	       		<p:menuitem value = "#{bundle['header.mySalaries']}"  url = "my-paid-salaries.xhtml" icon="ui-icon-transferthick-e-w"/>
+	 		 </p:submenu>
+	 		
+	 		<p:submenu label = "#{bundle['header.vacancies']}" icon="ui-icon-gear" rendered = "#{userBean.isHrUser()}">
+	 			<p:menuitem value = "#{bundle['header.vacancies']}" url  = "vacancies.xhtml" icon="ui-icon-gear" />
+	 		</p:submenu>
+	       
+	        <f:facet name="options">
+	        		
+	           		<p:menuButton value="#{bundle['header.option']}">
+				        <p:menuitem value="#{bundle['header.changePassword']}" actionListener="#{menuView.save}"  icon="ui-icon-disk"/>
+				        <p:menuitem value="#{bundle['settings.settings']}" actionListener="#{menuView.update}"  url = "/pages/settings.xhtml" icon="ui-icon-arrowrefresh-1-w"/>
+				       
+				        <p:separator />
+				        <p:menuitem value="#{bundle['header.logout']}" icon="ui-icon-extlink" action = "#{userBean.doLogout}" ajax= "false"/>
+	    			</p:menuButton>
+	        </f:facet>
+	    </p:menubar>
+	</div>
+	</h:form>
+</div>
+</ui:composition>
+</h:body>
+</f:view>
+</html>
