@@ -1,0 +1,94 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<style>
+		.empPGrid {
+			width:50%;
+			margin-left:auto;
+			margin-right:auto;
+		}
+		.col1 {
+			width:30%;
+		}
+		.col2 {
+			width:70%;
+		}
+		.addBonus {
+			width:70%;
+			margin-left:auto;
+			margin-right:auto;
+		}
+	</style>
+</h:head>
+   
+<h:body>	
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<div id = "wrapper">
+		 <ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset id = "addBonus" styleClass = "dataContent effect2">
+				<div class = "addBonus">
+				<p:tabView>
+					<p:tab title = "#{bundle['bonus.addBonus']}" style = "opacity:0.4">
+						<h:panelGrid columns = "2"  styleClass = "empPGrid" columnClasses="col1,col2">
+							<p:outputLabel value = "#{bundle['bonus.emp']}" style = "font-weight:bold"/>
+							<p:selectOneMenu id = "emp" style = "width:200px"  value = "#{bonusBean.selectedEmployee}" efect = "fold" filter="true" filterMatchMode="contains" ajax = "false" converter="omnifaces.SelectItemsConverter">
+							
+								<f:selectItem itemLabel="None" itemValue="" />	 
+								<f:selectItems value = "#{bonusBean.employees}" />  		
+					    	</p:selectOneMenu>
+					    	
+					    	
+					    	<p:outputLabel value = "#{bundle['bonus.type']}" style = "font-weight:bold"/>
+					    	<p:panel id = "boolCheckbox" style = "width:215px">
+					    		<h:panelGrid columns = "3">
+						    		<p:selectBooleanCheckbox id = "money" value = "#{bonusBean.money}" >
+						    			<p:ajax listener = "#{bonusBean.chooseMoney}" update = "boolCheckbox"/>
+						    		</p:selectBooleanCheckbox>
+									<p:outputLabel value = "#{bundle['bonus.money']}" for = "money" style = "margin-left:10px;font-size:25px"/>
+									<p:graphicImage value = "../resources/images/money.png" width="30" height = "30" style = "margin-left:40px"/>
+									
+									<p:selectBooleanCheckbox id = "holiday" value = "#{bonusBean.holiday}">
+											<p:ajax listener = "#{bonusBean.chooseHoliday}" update = "boolCheckbox"/>
+									</p:selectBooleanCheckbox>
+									<p:outputLabel value = "#{bundle['bonus.holiday']}" for = "holiday" style = "margin-left:10px;font-size:25px"/>
+									<p:graphicImage value = "../resources/images/holiday.ico" width="30" height = "30" style = "margin-left:40px"/>
+									
+									<p:selectBooleanCheckbox id = "tickets" value = "#{bonusBean.tickets}">
+											<p:ajax listener = "#{bonusBean.chooseTickets}" update = "boolCheckbox"/>
+									</p:selectBooleanCheckbox>
+									
+									<p:outputLabel value = "#{bundle['bonus.mealTickets']}" for = "tickets" style = "margin-left:10px;font-size:25px"/>
+									<p:graphicImage value = "../resources/images/mealtickets.png" width="30" height = "30" style = "margin-left:40px"/>
+								</h:panelGrid>
+					  		</p:panel>
+					    	
+					    	<p:outputLabel value = "#{bundle['bonus.value']}" />
+					    	<p:inputText style = "width:215px" value = "#{bonusBean.value}" onkeypress="if(event.which &lt; 46 || event.which &gt; 57) return false;"></p:inputText>
+					    	
+					    	<p:outputLabel value = "#{bundle['bonus.desc']}" />
+					    	<p:inputTextarea style = "width:215px" value = "#{bonusBean.description}"></p:inputTextarea>
+					    	
+						</h:panelGrid>
+						<p:commandButton value = "#{bundle['bonus.addBonus']}" actionListener = "#{bonusBean.addBonus}" update = "form"/>
+					</p:tab>
+				</p:tabView>
+				</div>
+			</p:fieldset>
+			<br/><br/><br/>
+			<div id = "footer">
+			 	<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>

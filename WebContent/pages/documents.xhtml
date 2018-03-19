@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:pe="http://primefaces.org/ui/extensions" 
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	
+</h:head>
+   
+<h:body>
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<h:outputStylesheet library="css" name="department.css" />
+	<h:outputScript>
+		function start() {
+			PF('statusDialog').show();
+			alert("a");
+		}
+		function stop() {
+			PF('statusDialog').hide();
+		}
+
+	</h:outputScript>
+	
+	<div id = "wrapper">
+		 <ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset id = "addJob" header = "#{bundle['department.department']}" legend = "#{bundle['department.department']}" styleClass = "dataContent effect2">
+				<div style = "width:80%;margin-right:auto;margin-left:auto;">
+					<h:form>
+	   					<p:dataTable styleClass = "wideList" id = "empsList"  value = "#{documentBean.employees}" var = "emp" 
+			    					  	 paginator = "true" 
+			    					  	 paginatorPosition="bottom"
+		 				 				 rows="10"
+		 				 				 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                 				 rowsPerPageTemplate="5,10,15"
+		                 				
+		                 				 rowKey="#{emp.userId}"
+		                 				 emptyMessage = "#{bundle['general.noRecords']}"
+		                 				 disabled = "true"
+		                 				 rendered = "#{documentBean.flag == 0}"
+		                 				 >
+		                 			<p:ajax event="rowSelect"  update=":form" />
+		                 			
+										
+			    				
+			    					<f:facet name="header">
+			    						<h:outputText value = "#{bundle['employees.employeesList']}" style = "margin-left:20%"/>
+			    					 </f:facet>
+			    					<p:column style = "width:40px" exportable="false">
+			    						 <h:outputLink value="../DisplayImage?Image_id=#{emp.userId}" target="_blank" >
+	                        				<h:graphicImage value="../DisplayImage?Image_id=#{emp.userId}" width="40" height="40"></h:graphicImage>
+	                    				</h:outputLink>
+			    					</p:column>
+			    					<p:column headerText = "#{bundle['employees.firstName']}" filterBy = "#{emp.firstName}" filterMatchMode = "contains">
+			    						<h:outputText value = "#{emp.firstName}"></h:outputText>
+			    					</p:column>
+			    					<p:column headerText = "#{bundle['employees.lastName']}" filterBy = "#{emp.lastName}" filterMatchMode = "contains">
+			    						<h:outputText value = "#{emp.lastName}"></h:outputText>
+			    					</p:column>
+			    					<p:column style = "width:80px">
+			    						<p:commandButton value = "#{bundle['document.viewFiles']}" actionListener = "#{documentBean.toView(emp)}" update = ":form"></p:commandButton>
+			    					</p:column>
+			    					<p:column  style = "width:80px">
+			    						<p:commandButton value = "#{bundle['document.addFiles']}" actionListener ="#{documentBean.toAdd(emp)}" update = ":form"/>
+			    					</p:column>
+		                 		</p:dataTable>
+		                 		
+		                 		<p:carousel id = "docs" value="#{documentBean.documents}" headerText="Documents" var="doc" itemStyle="text-align:center" rendered = "#{documentBean.flag == 1}" style = "width:800px;margin-left:auto;margin-right:auto">
+		                 			<p:panelGrid>
+		                 			<br/>
+		                 				<h:outputText value = "#{doc.documentName}"/><br/><br/>
+		                 				<object type ="#{documentBean.getType(doc.documentName)}" data = "../DisplayDocument?Doc_id=#{doc.id}" height="400px" width="100%" ></object>
+		                 				<br/><br/>
+		                 				<p:lightBox>
+		                 					<h:outputLink value="#">
+		                 						<p:commandButton value = "View"/>
+		                 						
+		                 					</h:outputLink>
+		                 					<f:facet name = "inline">
+		                 						<object type ="#{documentBean.getType(doc.documentName)}" data = "../DisplayDocument?Doc_id=#{doc.id}" height = "600" width="500">
+		                 							<h:outputLink value="../DisplayDocument?Doc_id=#{doc.id}">
+		                 							</h:outputLink>
+		                 						</object>
+		                 					</f:facet>
+		                 				</p:lightBox>
+		                 				<br/>
+		                 				<p:commandButton value = "Download" ajax = "false">
+		                 					  <p:fileDownload value = "#{documentBean.convertToInputStream(doc.documentContent,doc.documentName)}" onclick="PrimeFaces.monitorDownload(start, stop);"/>
+		                 				</p:commandButton> 
+		                 				<p:commandButton value = "Delete" actionListener = "#{documentBean.deleteDocuments(doc)}" update = "docs">
+		                 						<p:confirm header="#{bundle['document.confirmation']}" message="#{bundle['document.deleteDoc']}" icon="ui-icon-alert" />
+		                 				</p:commandButton>
+		                 				
+		                 			</p:panelGrid>
+		                 		</p:carousel>
+		                 		
+		                 		<p:fieldset header = "#{bundle['departments.add']}" legend = "#{bundle['departments.add']}" styleClass = "dataContent2 effect2"  rendered = "#{documentBean.flag == 2}" >
+						   			<p:fileUpload fileUploadListener="#{documentBean.handleFileUpload}" mode="advanced" update=":form:messages" allowTypes="/(\.|\/)(gif|jpe?g|png|pdf)$/" ajax = "true" value = "#{employeeBean.uploadFile}" label = "Browse"/>
+								</p:fieldset>	
+								<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		        					<p:commandButton value="#{bundle['employees.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        					<p:commandButton value="#{bundle['employees.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	    						</p:confirmDialog>
+								
+					</h:form>
+						<p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+							<p:graphicImage name="../resources/images/loading.gif" />
+						</p:dialog>
+				</div>
+				<p:commandButton value = "Back" action = "#{documentBean.toTable()}" update = ":form" rendered = "#{documentBean.flag == 1 or documentBean.flag == 2}"/>
+			</p:fieldset>
+			<br/><br/><br/>
+			<div id = "footer">
+				<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>
+		

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	
+</h:head>
+   
+<h:body>
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<h:outputStylesheet library="css" name="department.css" />
+	<div id = "wrapper">
+		 <ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id="form">  
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+				<p:fieldset id = "addJob" header = "#{bundle['department.department']}" legend = "#{bundle['department.department']}" styleClass = "dataContent effect2">
+				    <div class = "addJob">
+					    <div class="ui-grid ui-grid-responsive">
+					    <p:tabView>
+					    	<p:tab title = "#{departmentBean.editButtonGenerator==false? bundle['department.addDepartment']:bundle['department.editDepartment']}">
+					    		<p:message for = "departmentName"/>
+					    		<h:panelGrid columns="2"  cellpadding="10">
+					    			<h:outputText value = "#{bundle['departments.departmentName']}" />
+					    	
+					    			<p:inputText id="departmentName" value = "#{departmentBean.departmentName}" required = "true" requiredMessage = "#{bundle['department.nameRequired']}"/>
+					    		
+					    		
+					    	
+					    	
+					    	
+					    			<h:outputText value = "#{bundle['departments.departmentParent']}" />
+					    		
+					    		
+					    			<p:selectOneMenu id = "departmentParent" styleClass = "size-dropdown" value = "#{departmentBean.parent}" efect = "fold" filter="true" filterMatchMode="contains" ajax = "false" converter="omnifaces.SelectItemsConverter">
+										<p:ajax event="change" update="@this" />
+										<f:selectItem itemLabel="--#{bundle['department.department']}--" itemValue="" />	 
+										<f:selectItems value = "#{departmentBean.departments}" />  		
+		    						</p:selectOneMenu>
+					    			
+					    	
+					    		
+					    			<p:commandButton style = "font-weight:none !important" styleClass = "" value = "#{bundle['department.addDepartment']}" action = "#{departmentBean.addDepartment()}" ajax = "false" outcome = "departments" rendered = "#{not departmentBean.editButtonGenerator}"/>
+					    			<p:commandButton style = "font-weight:none !important" styleClass = "" value = "#{bundle['department.editDepartment']}" action = "#{departmentBean.editDepartment}" ajax = "false" outcome = "jobs" rendered = "#{departmentBean.editButtonGenerator}"/>
+					    		</h:panelGrid>
+					    	</p:tab>
+					    </p:tabView>
+				    </div>
+			    </div>
+			    <p:button value = "#{bundle['department.back']}" outcome = "departments"/>
+			</p:fieldset>	
+			<br/><br/><br/>
+			<div id = "footer">
+		 		<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>
