@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<style>
+		.col-10 {
+			width:12%;
+		}
+		.col-90 {
+			width:88%;
+		}
+	</style>
+</h:head>
+    
+<h:body>
+	<f:event type="preRenderView" listener="#{employeesAssignationBean.initPage}"/>
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<h:outputStylesheet library="css" name="employeeAssignation.css" />
+	<div id="wrapper">
+		<ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		<h:form id = "form">  
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset legend="Asignare angajati" styleClass = "dataContent effect2"> 
+				<div class="ui-grid ui-grid-responsive margin-grid">
+					<p:tabView dynamic="true" cache="true">
+		        		<p:tab title="Departament">
+		        		<div>
+		        			<h:panelGrid columns="2" style="margin-bottom:10px;margin-left:55%" cellpadding="5">
+		        				<h:outputText value = "Alege un departament: " />
+		        				<p:selectOneMenu id = "department" styleClass = "dropdown-width" value = "#{employeesAssignationBean.selectedDepartment}" efect = "fold" filter="true" filterMatchMode="contains" ajax = "false" converter="omnifaces.SelectItemsConverter">
+									<p:ajax event="change" update=":form" />
+									<f:selectItem itemLabel="--Departament--" itemValue="" />	 
+									<f:selectItems value = "#{employeesAssignationBean.departments}" />  		
+		    					</p:selectOneMenu>
+	
+		    				</h:panelGrid>
+		    				<div style = "width:37%;margin-left:55%">
+		    					<h:outputText style = "font-weight:bold" value = "Manager departament: #{employeesAssignationBean.selectedDepartment.managerId}" rendered = "#{employeesAssignationBean.selectedDepartment.managerId !=null}"/>
+		    					<h:outputText style = "font-weight:bold" value = "Departamentul selectat nu are manager" rendered = "#{employeesAssignationBean.selectedDepartment.managerId ==null and employeesAssignationBean.selectedDepartment!=null}" />
+		    				</div>
+		    				<br/><br/>
+		    			</div>
+		    				
+		        			<div class="ui-grid-row">
+		        				<div class="ui-grid-col-1"> 
+		        				</div>
+		    					<div class="ui-grid-col-5"> 
+		            				<p:dataTable id="multipleDT" var="emp" value="#{employeesAssignationBean.unassignedDepartmentEmployees}" selectionMode="multiple" selection="#{employeesAssignationBean.selectedUnassignedDepartmentEmployees}" rowKey="#{emp.userId}">
+	        							<p:ajax event = "rowSelect" update = ":form"/>
+	        							<f:facet name="header">
+	            							Angajati neasignati
+	        							</f:facet>
+			        					<p:column>
+			        						<p:panelGrid columns = "2" columnClasses="col-10,col-90" border = "0">
+												<p:graphicImage value = "../DisplayImage?Image_id=#{emp.userId}" width = "20" height = "30"/>
+												<h:outputText value = "#{emp.lastName} #{emp.firstName}" />
+											</p:panelGrid>
+			        					</p:column>
+		        				 	</p:dataTable>
+		        				</div> 
+		        				<div class="ui-grid-col-2">
+			        				<div>
+			        					<p:commandButton value = "Adauga" actionListener = "#{employeesAssignationBean.addEmployeesToDepartment()}" icon = "fa fa-long-arrow-right" style = "width:80%;margin-left:10%;" update = ":form" disabled = "#{employeesAssignationBean.selectedUnassignedDepartmentEmployees == null or employeesAssignationBean.selectedDepartment == null}"/>
+			        				
+				        				
+			        				</div>
+			        				<p:separator></p:separator>
+			        				<div>
+			        					<p:commandButton value = "Elimina" actionListener = "#{employeesAssignationBean.getEmployeesFromDepartment}" icon = "fa fa-long-arrow-left" style = "width:80%;margin-left:10%;" update = ":form" disabled = "#{employeesAssignationBean.selectedAssignedDepartmentEmployees == null or employeesAssignationBean.selectedDepartment == null}"/>
+			        				</div>
+									
+		        				</div>
+		        				<div class="ui-grid-col-5"> 
+		            				<p:dataTable id="multipleDT2" var="emp" value="#{employeesAssignationBean.assignedDepartmentEmployees}" selectionMode="multiple" selection="#{employeesAssignationBean.selectedAssignedDepartmentEmployees}" rowKey="#{emp.userId} ">
+	        							<f:facet name="header">
+	            							<h:outputText value = "#{employeesAssignationBean.selectedDepartment !=null ? employeesAssignationBean.selectedDepartment : 'Nu ati selectat nici un departament'}"/>
+	        							</f:facet>
+			        					<p:ajax event = "rowSelect" update = ":form"/>
+			        					<p:column>
+			        						<p:panelGrid columns = "2" columnClasses="col-10,col-90" border = "0">
+												<p:graphicImage value = "../DisplayImage?Image_id=#{emp.userId}" width = "20" height = "30"/>
+												<h:outputText value = "#{emp.lastName} #{emp.firstName}" />
+											</p:panelGrid>
+			        					</p:column>
+		        				 	</p:dataTable>
+		        					
+		        				 	<br/>
+		        				 	<p:commandButton value = "Seteaza manager" disabled = "#{employeesAssignationBean.selectedDepartment == null or employeesAssignationBean.selectedAssignedDepartmentEmployees == null}" actionListener = "#{employeesAssignationBean.addManagerToDepartment}" update= ":form"/>
+		        				</div>
+		        				<div class="ui-grid-col-1"> 
+		        				</div>
+		        			</div>
+		        		</p:tab>
+		        		<p:tab title="Job">
+		        		<div>
+		        			<h:panelGrid columns="2" style="margin-bottom:10px;margin-left:62%" cellpadding="5">
+			        			<h:outputText value = "Alege un job: "/>
+			        			<p:selectOneMenu id = "job" styleClass = "dropdown-width" value = "#{employeesAssignationBean.selectedJob}" efect = "fold" filter="true" filterMatchMode="contains" ajax = "false" converter="omnifaces.SelectItemsConverter">
+										<p:ajax event="change" update=":form" />
+										<f:selectItem itemLabel="--Job--" itemValue="" />	 
+										<f:selectItems value = "#{employeesAssignationBean.jobs}" />  		
+			    				</p:selectOneMenu>
+		    				</h:panelGrid>
+		    			</div>
+		            		<br/>
+		    				<br/>
+		        			<div class="ui-grid-row">
+		        				<div class="ui-grid-col-1"> 
+		        				</div>
+		    					<div class="ui-grid-col-5"> 
+		            				<p:dataTable id="multipleDT3" var="emp" value="#{employeesAssignationBean.unassignedJobEmployees}" selectionMode="multiple" selection="#{employeesAssignationBean.selectedUnassignedJobEmployees}" rowKey="#{emp.userId}">
+	        							<p:ajax event = "rowSelect" update = ":form"/>
+	        							<f:facet name="header">
+	            							Angajati neasignati
+	        							</f:facet>
+			        					<p:column>
+			        						<p:panelGrid columns = "2" columnClasses="col-10,col-90" border = "0">
+												<p:graphicImage value = "../DisplayImage?Image_id=#{emp.userId}" width = "20" height = "30"/>
+												<h:outputText value = "#{emp.lastName} #{emp.firstName}" />
+											</p:panelGrid>
+			        					</p:column>
+		        				 	</p:dataTable>
+		        				</div>
+		        				<div class="ui-grid-col-2">
+		        				<div>
+		        					<p:commandButton actionListener = "#{employeesAssignationBean.addEmployeesToJob}" icon = "fa fa-long-arrow-right" style = "width:80%;margin-left:10%;" update = ":form" disabled = "#{employeesAssignationBean.selectedUnassignedJobEmployees == null or employeesAssignationBean.selectedJob == null}"/>
+		        				</div>
+		        				<br/>
+		        				<div>
+		        					<p:commandButton actionListener = "#{employeesAssignationBean.getEmployeesFromJob}" icon = "fa fa-long-arrow-left" style = "width:80%;margin-left:10%;" update = ":form" disabled = "#{employeesAssignationBean.selectedAssignedJobEmployees == null or employeesAssignationBean.selectedJob == null}"/>
+		        				</div>
+								
+		        				</div>
+		        				<div class="ui-grid-col-5"> 
+		            				<p:dataTable id="multipleDT4" var="emp" value="#{employeesAssignationBean.assignedJobEmployees}" selectionMode="multiple" selection="#{employeesAssignationBean.selectedAssignedJobEmployees}" rowKey="#{emp.userId}">
+	        							<p:ajax event = "rowSelect" update = ":form"/>
+	        							<f:facet name="header">
+	            							<h:outputText value = "#{employeesAssignationBean.selectedJob !=null ? employeesAssignationBean.selectedJob : 'Nu ati selectat nici un job'}"/>
+	        							</f:facet>
+			        					<p:column>
+			        						<p:panelGrid columns = "2" columnClasses="col-10,col-90" border = "0">
+												<p:graphicImage value = "../DisplayImage?Image_id=#{emp.userId}" width = "20" height = "30"/>
+												<h:outputText value = "#{emp.lastName} #{emp.firstName}" />
+											</p:panelGrid>
+			        					</p:column>
+		        				 	</p:dataTable>
+		        				</div>
+		        				<div class="ui-grid-col-1"> 
+		        				</div>
+		        			</div>
+		        		</p:tab>
+	    			</p:tabView>
+	    		</div>
+	    	</p:fieldset>
+	    	<br/><br/><br/>
+			<div id = "footer">
+			 	<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		</h:form>
+	</div>
+</h:body>
+</html>

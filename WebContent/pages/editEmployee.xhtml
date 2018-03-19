@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	
+</h:head>
+   
+<h:body>
+<ui:composition>
+	<h:outputScript library="js" name="uploadJS.js" />
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<h:outputStylesheet library="css" name="employee.css" />
+	<div id="wrapper">
+		
+		
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+		
+			
+			<p:wizard styleClass = "wizard-width" flowListener="#{employeeBean.onFlowProcess}">
+	        <p:tab id="personal" title="#{bundle['employee.personals']}">
+	            <p:panel header="#{bundle['employee.personalDetails']}" >
+	                <p:messages />
+	                <h:panelGrid columns="2" columnClasses="label, value" style = "margin-left:auto;margin-right:auto">
+	                    <h:outputText value="#{bundle['employees.firstName']}" />
+	                    <p:inputText value="#{employeeBean.selectedEmployee.firstName}" required="true" requiredMessage = "#{bundle['employee.fnReqMess']}"/>
+	 
+	                    <h:outputText value="#{bundle['employees.lastName']}" />
+	                    <p:inputText value="#{employeeBean.selectedEmployee.lastName}" required="true" requiredMessage = "#{bundle['employee.lnReqMess']}"/>
+	                	
+	                	<h:outputText value = "Current avatar"/>
+	                    <h:graphicImage value = "../DisplayImage?Image_id=#{employeeBean.selectedEmployee.userId}" height="100" width = "100"></h:graphicImage>
+	                
+	                	<h:outputText value="Avatar " />
+    					<p:fileUpload fileUploadListener="#{employeeBean.handleFileUpload}" mode="advanced" update="messages" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" ajax = "true" value = "#{employeeBean.uploadFile}"/>
+	                
+	                	
+	                </h:panelGrid>
+	            </p:panel>
+	        </p:tab>
+	 		
+	 		<p:tab id="account" title="#{bundle['employee.account']}">
+	            <p:panel header="#{bundle['employee.accountDetails']}">
+	                <p:messages/>
+	                <h:panelGrid columns="2" columnClasses="label, value" style = "margin-left:auto;margin-right:auto">
+	                 
+	                	<h:outputText value = "#{bundle['employees.employeeRole']}"/>
+	                	<p:selectOneMenu value = "#{employeeBean.role}" style = "width:100px !important">
+	                		<f:selectItem itemLabel="#{bundle['employee.roleValue1']}" itemValue="1" />
+	                		<f:selectItem itemLabel="#{bundle['employee.roleValue2']}" itemValue="2" />
+	                	</p:selectOneMenu>
+	                	
+	                	<h:outputText value = "#{bundle['employees.hireDate']}"/>
+	                	<p:calendar value = "#{employeeBean.selectedEmployee.hireDate}" mode="popup"  pattern="yyyy-MMM-dd" required="true" requiredMessage="#{bundle['employee.hdReqMess']}">
+	                		 
+	                	</p:calendar>
+	                </h:panelGrid>
+	            </p:panel>
+	        </p:tab>
+	 		
+	 		<p:tab id = "contInf" title = "#{bundle['employee.contractualInformation']}">
+	 			<p:panel header="#{bundle['employee.accountDetails']}">
+	                <p:messages/>
+	                <h:panelGrid columns="2" columnClasses="label, value" style = "margin-left:auto;margin-right:auto">
+	                    <h:outputText value="#{bundle['employee.salary']}" />
+	                    <p:inputText id = "salary" value="#{employeeBean.selectedEmployee.salary}" required="true" requiredMessage = "#{bundle['employee.salReqMess']}"/>
+	                    
+	                    <h:outputText value="#{bundle['employee.holidayDays']}" />
+	                    <p:inputText id = "holDays" value="#{employeeBean.selectedEmployee.hdCurrentYear}" required="true" requiredMessage = "#{bundle['employee.hdReqMess']}"/>
+	                    <p:slider for="holDays"  style = "width:300%"/>
+	                </h:panelGrid>
+	            </p:panel>
+	 		</p:tab>
+	 		
+	        <p:tab id="address" title="#{bundle['employees.address']}">
+	            <p:panel header="#{bundle['employee.addressDetails']}">
+	                <p:messages />
+	                <h:panelGrid columns="2" columnClasses="label, value" style = "margin-left:auto;margin-right:auto">
+	                    <h:outputText value="#{bundle['employees.address']}" />
+	                    <p:inputText value="#{employeeBean.selectedEmployee.address}" required = "true" requiredMessage = "#{bundle['employee.addReqMess']}"/>
+	 
+	                    <h:outputText value="#{bundle['employees.county']} " />
+	                    <p:inputText value="#{employeeBean.selectedEmployee.county}" required = "true" requiredMessage = "#{bundle['employee.countyReqMess']}"/>
+	 
+	                    <h:outputText value="#{bundle['employees.city']}" />
+	                    <p:inputText value="#{employeeBean.selectedEmployee.city}" required = "true" requiredMessage = "#{bundle['employee.cityReqMess']}"/>
+	
+	                </h:panelGrid>
+	            </p:panel>
+	        </p:tab>
+	 
+	        <p:tab id="contact" title="#{bundle['employee.contact']}">
+	            <p:panel header="#{bundle['employee.contactDetails']}">
+	                <p:messages />
+	                <h:panelGrid columns="2" columnClasses="label, value" style = "margin-left:auto;margin-right:auto">
+	                    <h:outputText value="#{bundle['employees.email']}" />
+	                    <p:inputText value="#{employeeBean.selectedEmployee.email}" required="true" requiredMessage = "#{bundle['employee.emailReqMess']}"/>
+	 
+	                    <h:outputText value="Numar telefon: " />
+	                    <p:inputText value="#{employeeBean.selectedEmployee.phoneNumber}" required = "true" requiredMessage = "#{bundle['employee.pnReqMess']}"/>
+	
+	                </h:panelGrid>
+	            </p:panel>
+	        </p:tab>
+	 		
+	 		
+	 
+	 		
+	        <p:tab id="confirm" title="#{bundle['employee.confirm']}">
+	            <p:panel header="#{bundle['employee.confirm']}">
+	                <h:panelGrid id="confirmation" style  = " width:100%">
+	                    <h:panelGrid columns="2" columnClasses="label, value" style = "margin-right:auto;margin-left:auto;">
+	                        <h:outputText value="#{bundle['employees.firstName']} " style = "font-weight:bold"/>
+	                        <h:outputText value="#{employeeBean.selectedEmployee.firstName}" styleClass="outputLabel"/>
+	 
+	                        <h:outputText value="#{bundle['employees.lastName']} " style = "font-weight:bold"/>
+	                        <h:outputText value="#{employeeBean.selectedEmployee.lastName}" styleClass="outputLabel" />
+	 
+	                       
+	                    	
+	                    	<h:outputText value="#{bundle['employees.hireDate']}" style = "font-weight:bold"/>
+	                        <h:outputText value="#{employeeBean.selectedEmployee.hireDate}" styleClass="outputLabel">
+	                        	<f:convertDateTime pattern="yyyy-MMM-dd" type="date" />
+	                        </h:outputText>
+	                    	
+	                    	<h:outputText value="#{bundle['employees.employeeRole']}" style = "font-weight:bold"/>
+	                        <h:outputText value="#{employeeBean.role == 1? bundle['employee.roleValue1']:bundle['employee.roleValue2']}" styleClass="outputLabel"/>
+	                    	
+	                    	<h:outputText value="#{bundle['employee.salary']}" style = "font-weight:bold"/>
+	                        <h:outputText value="#{employeeBean.selectedEmployee.salary}" styleClass="outputLabel"/>
+	                        
+	                        <h:outputText value="#{bundle['employee.holidayDays']}" style = "font-weight:bold"/>
+	                        <h:outputText value="#{employeeBean.selectedEmployee.hdCurrentYear}" styleClass="outputLabel"/>
+	                    	
+	                        <h:outputText value="#{bundle['employees.address']}" style = "font-weight:bold"/>
+	                        <h:outputText value="#{employeeBean.selectedEmployee.address}" styleClass="outputLabel"/>
+	 
+	                        <h:outputText value="#{bundle['employees.county']}" style = "font-weight:bold"/>
+	                        <h:outputText value="#{employeeBean.selectedEmployee.county}" styleClass="outputLabel"/>
+	 
+	                        <h:outputText value="#{bundle['employees.city']}" style = "font-weight:bold"/>
+	                        <h:outputText value="#{employeeBean.selectedEmployee.city}" styleClass="outputLabel"/>
+	                 
+	                        <h:outputText value="#{bundle['employees.email']}" style = "font-weight:bold"/>
+	                        <h:outputText value="#{employeeBean.selectedEmployee.email}" styleClass="outputLabel"/>
+	 
+	                        <h:outputText value="#{bundle['employees.phoneNumber']}" style = "font-weight:bold"/>
+	                        <h:outputText value="#{employeeBean.selectedEmployee.phoneNumber}" styleClass="outputLabel"/>
+	 
+	                        <h:outputText />
+	                        <h:outputText />
+	                    </h:panelGrid>
+	                </h:panelGrid>
+	 
+	               
+	                <p:commandButton value="#{bundle['employees.edit']}" ajax  = "false" action = "#{employeeBean.editEmployee()}"/>
+	            </p:panel>
+	        </p:tab>
+	     
+	    </p:wizard>
+			<br/><br/>
+			<p:button value = "#{bundle['general.back']}" outcome = "employees"/>
+
+	</div>
+</ui:composition>
+</h:body>
+</html>

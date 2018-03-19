@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pe="http://primefaces.org/ui/extensions">
+<h:head>
+
+</h:head>
+    
+<h:body>
+
+	<h:outputStylesheet library="css" name="commonStyle.css" />
+	<div id="wrapper">
+		<ui:insert>
+			<ui:include src = "../header.xhtml" />
+		</ui:insert>
+		
+			<p:messages id="messages" globalOnly = "true" autoUpdate = "true" closable = "true"/>
+			<p:fieldset legend="#{bundle['employees.employeesList']}" styleClass = "dataContent effect2"> 
+			<h:form id = "form">  
+				<div class="ui-grid ui-grid-responsive margin-grid">
+					<div class="ui-grid-row">
+		    			<div class="ui-grid-col-12"> 
+		    				<div>
+		    					<p:contextMenu for = "empsList">
+		    					<p:menuitem id="detailsId" value = "#{bundle['employees.details']}" oncomplete="PF('empDetails').show()" update = ":form:dialog"/>
+		    					<p:menuitem id="editId" value = "#{bundle['employees.edit']}" action = "#{employeeBean.toEdit()}" update  = ":form"/>
+		    					<p:menuitem id="deleteId" value = "#{bundle['employees.delete']}" action = "#{employeeBean.deleteEmployee()}" update = ":form">
+			    					<p:confirm header="Confirmare" message="Esti sigur ca vrei sa stergi acest angajat?" icon="ui-icon-alert" />
+			    				</p:menuitem>
+			    				</p:contextMenu>
+			    				<p:dataTable styleClass = "wideList" id = "empsList"  value = "#{employeeBean.employees}" var = "emp" 
+			    					  	 paginator = "true" 
+			    					  	 paginatorPosition="bottom"
+		 				 				 rows="10"
+		 				 				 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+		                 				 rowsPerPageTemplate="5,10,15"
+		                 				 selectionMode="single" 
+		                 				 selection="#{employeeBean.selectedEmployee}" 
+		                 				 rowKey="#{emp.userId}"
+		                 				 emptyMessage = "#{bundle['general.noRecords']}"
+		                 				 disabled = "true"
+		                 				 rendered = "#{employeeBean.flag == 0}"
+		                 				 >
+		                 			<p:ajax event="rowSelect"  update=":form" />
+		                 			
+										
+			    				
+			    					<f:facet name="header">
+			    							<div class="ui-grid-row">
+				    						<div class="ui-grid-col-10"> 
+			    								<h:outputText value = "#{bundle['employees.employeesList']}" style = "margin-left:20%"/>
+			    							</div>
+			    							<div class="ui-grid-col-2"> 
+							            		<h:commandLink style = "margin-left:90%">
+							                		<p:graphicImage value="../resources/images/pdf.png" width="24"/>
+							                		<p:dataExporter type="pdf" target="empsList" fileName="EmployeesList" preProcessor="#{exporterBean.preProcessPDFEmployeesList}"/>
+							            		</h:commandLink>
+							            	</div>
+							            	
+							            </div>
+							        </f:facet>
+			    					<p:column style = "width:40px" exportable="false">
+			    						 <h:outputLink value="../DisplayImage?Image_id=#{emp.userId}" target="_blank" >
+	                        				<h:graphicImage value="../DisplayImage?Image_id=#{emp.userId}" width="40" height="40"></h:graphicImage>
+	                    				</h:outputLink>
+			    					</p:column>
+			    					<p:column headerText = "#{bundle['employees.firstName']}" filterBy = "#{emp.firstName}" filterMatchMode = "contains">
+			    						<h:outputText value = "#{emp.firstName}"></h:outputText>
+			    					</p:column>
+			    					<p:column headerText = "#{bundle['employees.lastName']}" filterBy = "#{emp.lastName}" filterMatchMode = "contains">
+			    						<h:outputText value = "#{emp.lastName}"></h:outputText>
+			    					</p:column>
+			    					<p:column headerText = "#{bundle['employees.department']}" filterBy = "#{emp.department.departmentName}" filterMatchMode = "contains">
+			    						<h:outputText value = "#{emp.department.departmentName}"></h:outputText>
+			    					</p:column>
+			    					<p:column headerText = "#{bundle['employees.job']}" filterBy = "#{emp.job.jobName}" filterMatchMode = "contains">
+			    						<h:outputText value = "#{emp.job.jobName}"></h:outputText>
+			    					</p:column>
+		                 		</p:dataTable>
+		                 		
+		                 		<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+		        					<p:commandButton value="#{bundle['employees.yes']}" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+		        					<p:commandButton value="#{bundle['employees.no']}" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	    						</p:confirmDialog>
+	    						<br/>
+	    						<p:dialog id = "dialog" header="#{bundle['employees.employeeDetails']}" widgetVar="empDetails" modal="true" showEffect="fade" hideEffect="fade" resizable="false" width="500">
+	        					
+	        					<p:outputPanel id="multiCarDetail" style="text-align:left;margin-left:auto;margin-right:auto">
+	        						 <div style = "width:70%;margin-left:auto;margin-right:auto">
+	        						 
+	                    				
+		        						<div class="ui-grid ui-grid-responsive margin-grid">
+			    							<div class="ui-grid-row">
+			    								<div class = "ui-grid-col-5">
+			    									<p:lightBox>
+		        										 <h:outputLink value="../DisplayImage?Image_id=#{employeeBean.selectedEmployee.userId}" target="_blank" >
+				                        					<h:graphicImage value="../DisplayImage?Image_id=#{employeeBean.selectedEmployee.userId}" width="120" height="120"></h:graphicImage>
+				                    					</h:outputLink>
+	                    							</p:lightBox>
+			    									
+			    								</div>
+			    								<div class="ui-grid-col-7"> 			
+			    									<h:outputText style = "font-size:20px" value = "#{employeeBean.selectedEmployee.lastName} #{employeeBean.selectedEmployee.firstName}" />	
+			    									<br/>
+			    									<h:outputText value = "#{employeeBean.selectedEmployee.email}" />
+			    								</div>
+			    							</div>
+			    							<p:separator/>
+			    							
+			    							<div style = "border:1px solid black;padding:10px;font-size:15px">
+				    							
+				    							<div class="ui-grid-row">
+				    								<div class="ui-grid-col-4"> 
+				    									<h:outputText value = "#{bundle['employees.username']}" style = "font-weight:bold"/>
+				    								</div>
+				    								<div class="ui-grid-col-8"> 
+				    									<h:outputText value = "#{employeeBean.selectedEmployee.username}" />
+				    								</div>
+				    							</div>
+				    							<p:separator/>
+				    							<div class="ui-grid-row">
+				    								<div class="ui-grid-col-4"> 
+				    									<h:outputText value = "#{bundle['employees.employeeRole']}" style = "font-weight:bold"/>
+				    								</div>
+				    								<div class="ui-grid-col-8"> 
+				    									<h:outputText value = "#{employeeBean.selectedEmployee.role}" />
+				    								</div>
+				    							</div>
+				    							<p:separator/>
+				    							<div class="ui-grid-row">
+				    								<div class="ui-grid-col-4"> 
+				    									<h:outputText value = "#{bundle['employee.salary']}" style = "font-weight:bold"/>
+				    								</div>
+				    								<div class="ui-grid-col-8"> 
+				    									<h:outputText value = "#{employeeBean.selectedEmployee.salary}" />
+				    								</div>
+				    							</div>
+				    							<p:separator/>
+				    							<div class="ui-grid-row">
+				    								<div class="ui-grid-col-4"> 
+				    									<h:outputText value = "#{bundle['employee.hdCurrentYear']}" style = "font-weight:bold"/>
+				    								</div>
+				    								<div class="ui-grid-col-8"> 
+				    									<h:outputText value = "#{employeeBean.selectedEmployee.hdCurrentYear}" />
+				    								</div>
+				    							</div>
+				    							<p:separator/>
+				    							<div class="ui-grid-row">
+				    								<div class="ui-grid-col-4"> 
+				    									<h:outputText value = "#{bundle['employee.hdLastYear']}" style = "font-weight:bold"/>
+				    								</div>
+				    								<div class="ui-grid-col-8"> 
+				    									<h:outputText value = "#{employeeBean.selectedEmployee.hdLastYear}" />
+				    								</div>
+				    							</div>
+				    							<p:separator/>
+				    							<div class="ui-grid-row">
+				    								<div class="ui-grid-col-4"> 
+				    									<h:outputText value = "#{bundle['employees.email']}" style = "font-weight:bold"/>
+				    								</div>
+				    								<div class="ui-grid-col-8"> 
+				    									<h:outputText value = "#{employeeBean.selectedEmployee.email}" />
+				    								</div>
+				    							</div>
+				    							<p:separator/>
+				    							<div class="ui-grid-row">
+				    								<div class="ui-grid-col-4"> 
+				    									<h:outputText value = "#{bundle['employees.phoneNumber']}" style = "font-weight:bold"/>
+				    								</div>
+				    								<div class="ui-grid-col-8"> 
+				    									<h:outputText value = "#{employeeBean.selectedEmployee.phoneNumber}" />
+				    								</div>
+				    							</div>
+				    							<p:separator/>
+				    							<div class="ui-grid-row">
+				    								<div class="ui-grid-col-4"> 
+				    									<h:outputText value = "#{bundle['employees.address']}" style = "font-weight:bold"/>
+				    								</div>
+				    								<div class="ui-grid-col-8"> 
+				    									<h:outputText value = "#{employeeBean.selectedEmployee.address}" />
+				    								</div>
+				    							</div>
+				    							<p:separator/>
+				    							<div class="ui-grid-row">
+				    								<div class="ui-grid-col-4"> 
+				    									<h:outputText value = "#{bundle['employees.county']}" style = "font-weight:bold"/>
+				    								</div>
+				    								<div class="ui-grid-col-8"> 
+				    									<h:outputText value = "#{employeeBean.selectedEmployee.county}" />
+				    								</div>
+				    							</div>
+				    							<p:separator/>
+				    							<div class="ui-grid-row">
+				    								<div class="ui-grid-col-4"> 
+				    									<h:outputText value = "#{bundle['employees.city']}" style = "font-weight:bold"/>
+				    								</div>
+				    								<div class="ui-grid-col-8"> 
+				    									<h:outputText value = "#{employeeBean.selectedEmployee.city}" />
+				    								</div>
+				    							</div>
+				    							<p:separator/>
+				    							<div class="ui-grid-row">
+				    								<div class="ui-grid-col-4"> 
+				    									<h:outputText value = "#{bundle['employees.hireDate']}" style = "font-weight:bold"/>
+				    								</div>
+				    								<div class="ui-grid-col-8"> 
+				    									<h:outputText value = "#{employeeBean.selectedEmployee.hireDate}" >
+				    										<f:convertDateTime pattern="yyyy-MMM-dd" type="date" />
+				    									</h:outputText>
+				    								</div>
+				    							</div>
+			    							</div>
+			    						</div>
+		    						</div>
+	        						<br/>
+	        					</p:outputPanel>
+	        					
+	    					</p:dialog>
+		    				</div>
+		    			</div>
+		    		</div>
+				</div>
+				<p:commandButton id="addId" value = "#{bundle['employees.add']}" icon = "fa fa-fw fa-plus" actionListener = "#{employeeBean.toAdd}" update = ":form"  rendered = "#{employeeBean.flag == 0}"/>  
+			
+				
+				 <ui:fragment id="addEmpShow" rendered = "#{employeeBean.flag == 1}"> 
+					<ui:insert>
+						<ui:include src = "employee.xhtml" />
+					</ui:insert>
+				</ui:fragment>
+				
+				 <ui:fragment id="addEmpShow2" rendered = "#{employeeBean.flag == 2}"> 
+					<ui:insert>
+						<ui:include src = "editEmployee.xhtml" />
+					</ui:insert>
+				</ui:fragment>
+			
+			</h:form>
+			</p:fieldset>
+			
+			<br/><br/><br/>
+			<div id = "footer">
+			 	<ui:insert>
+					<ui:include src = "footer.xhtml"  />
+				</ui:insert>
+			</div>
+		
+	</div>
+</h:body>
+</html>
